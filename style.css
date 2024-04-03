@@ -56,6 +56,13 @@ body {
   min-height: 500px;
 }
 
+
+
+.form_container {
+  padding: 20px;
+  border: #222 solid 2px;
+}
+
 .btn {
   cursor: pointer;
 }
