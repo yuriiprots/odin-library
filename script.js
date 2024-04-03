@@ -1,6 +1,6 @@
 const modalForm = document.getElementById("modal__form");
 
-const myLibrary = [];
+let myLibrary = [];
 
 /* ---------------------- BOOK CLASS ------------------------*/
 
@@ -15,11 +15,7 @@ function Book(title, author, pages, read) {
   };
 
   this.toggleRead = () => {
-    if (this.read === "read") {
-      this.read = "not read yet";
-    } else {
-      this.read = "read";
-    }
+    this.read = this.read === "read" ? "not read yet" : "read";
   };
 }
 /* ---------------------- ADD BOOK ------------------------*/
@@ -43,7 +39,7 @@ const addBookToLibrary = () => {
   } else {
     alert("Please fill in all the fields");
   }
-
+  saveLibraryToLocalStorage();
   console.log(myLibrary);
 };
 
@@ -105,6 +101,7 @@ const removeBookFromLibrary = (e) => {
     myLibrary.splice(id, 1);
     displayBooks();
     console.log(myLibrary);
+    saveLibraryToLocalStorage();
   }
 };
 
@@ -117,10 +114,34 @@ const readBtn = document.querySelector(".read");
 const toggleReadBtn = (e) => {
   if (e.target.classList.contains("read")) {
     const id = e.target.parentElement.dataset.id;
+    console.log(id);
+    console.log(myLibrary[id]);
     myLibrary[id].toggleRead();
     displayBooks();
     console.log(myLibrary);
+    saveLibraryToLocalStorage();
   }
 };
 
 bookContainer.addEventListener("click", (e) => toggleReadBtn(e));
+
+/* ---------------------- LOCAL STORAGE ------------------------*/
+const saveLibraryToLocalStorage = () => {
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+};
+
+const retrieveLibraryFromLocalStorage = () => {
+  const storedLibrary = localStorage.getItem("myLibrary");
+  console.log(storedLibrary);
+  if (storedLibrary) {
+    const storedBooks = JSON.parse(storedLibrary);
+    console.log(storedBooks);
+    myLibrary = storedBooks.map(
+      ({ title, author, pages, read }) => new Book(title, author, pages, read)
+    );
+    console.log(myLibrary);
+    displayBooks();
+  }
+};
+
+window.addEventListener("load", retrieveLibraryFromLocalStorage);
