@@ -1,7 +1,8 @@
-const form = document.getElementById("form");
-const submitBtn = document.getElementById("submit__btn");
+const modalForm = document.getElementById("modal__form");
 
 const myLibrary = [];
+
+/* ---------------------- BOOK CLASS ------------------------*/
 
 function Book(title, author, pages, read) {
   this.title = title;
@@ -13,10 +14,7 @@ function Book(title, author, pages, read) {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
   };
 }
-
-const book1 = new Book("The Hobbit", "Tolkien", 295, "not read yet");
-const book2 = new Book("The Fellowship", "Tolkien", 1255, "not read yet");
-const book3 = new Book("The Two Towers", "Tolkien", 300, "not read yet");
+/* ---------------------- ADD BOOK ------------------------*/
 
 const addBookToLibrary = () => {
   const title = document.getElementById("title").value;
@@ -28,16 +26,65 @@ const addBookToLibrary = () => {
   if (title && author && pages) {
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
-    form.reset();
+
+    modalForm.reset();
+    closeModal();
+    displayBooks();
+  
   } else {
     alert("Please fill in all the fields");
   }
+
   console.log(myLibrary);
 };
 
+const submitBtn = document.getElementById("submit__btn");
 submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
   addBookToLibrary();
 });
 
-console.log(myLibrary);
+/* ---------------------- DISPLAY BOOKS ------------------------*/
+const bookContainer = document.querySelector(".books__container");
+
+const displayBooks = () => {
+  bookContainer.innerHTML = "";
+  myLibrary.forEach((book) => {
+    bookContainer.insertAdjacentHTML(
+      "beforeend",
+      `
+    <div class="book-card">
+      <h2 class="title">${book.title}</h2>
+      <p class="author">by ${book.author}</p>
+      <p class="pages">${book.pages} pages</p>
+      <p class="read">${book.read}</p>
+      <button class="remove">Remove</button>
+    </div>`
+    );
+  });
+};
+
+/* ---------------------- MODAL WINDOW AND OVERLAY ------------------------*/
+
+const modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
+const openModalBtn = document.querySelector(".btn__open-modal");
+
+const openModal = () => {
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
+
+const closeModal = () => {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+openModalBtn.addEventListener("click", openModal);
+overlay.addEventListener("click", closeModal);
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeModal();
+  }
+});
