@@ -13,6 +13,14 @@ function Book(title, author, pages, read) {
   this.info = () => {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
   };
+
+  this.toggleRead = () => {
+    if (this.read === "read") {
+      this.read = "not read yet";
+    } else {
+      this.read = "read";
+    }
+  };
 }
 /* ---------------------- ADD BOOK ------------------------*/
 const submitBtn = document.getElementById("submit__btn");
@@ -22,6 +30,7 @@ const addBookToLibrary = () => {
   const author = document.getElementById("author").value;
   const pages = document.getElementById("pages").value;
   const readCheckbox = document.getElementById("read");
+  console.log(readCheckbox);
   const read = readCheckbox.checked ? "read" : "not read yet";
 
   if (title && author && pages) {
@@ -56,7 +65,7 @@ const displayBooks = () => {
       <h2 class="title">${book.title}</h2>
       <p class="author">by ${book.author}</p>
       <p class="pages">${book.pages} pages</p>
-      <p class="read">${book.read}</p>
+      <button class="read">${book.read}</button>
       <button class="remove">Remove</button>
     </div>`
     );
@@ -89,7 +98,7 @@ document.addEventListener("keydown", function (e) {
 
 /* ---------------------- REMOVE BOOK ------------------------*/
 
-const removeBook = (e) => {
+const removeBookFromLibrary = (e) => {
   if (e.target.classList.contains("remove")) {
     const id = e.target.parentElement.dataset.id;
     e.target.parentElement.remove();
@@ -99,4 +108,19 @@ const removeBook = (e) => {
   }
 };
 
-bookContainer.addEventListener("click", (e) => removeBook(e));
+bookContainer.addEventListener("click", (e) => removeBookFromLibrary(e));
+
+/* ---------------------- MARK READ OR UNREAD STATUS BOOK------------------------*/
+
+const readBtn = document.querySelector(".read");
+
+const toggleReadBtn = (e) => {
+  if (e.target.classList.contains("read")) {
+    const id = e.target.parentElement.dataset.id;
+    myLibrary[id].toggleRead();
+    displayBooks();
+    console.log(myLibrary);
+  }
+};
+
+bookContainer.addEventListener("click", (e) => toggleReadBtn(e));
