@@ -15,6 +15,7 @@ function Book(title, author, pages, read) {
   };
 }
 /* ---------------------- ADD BOOK ------------------------*/
+const submitBtn = document.getElementById("submit__btn");
 
 const addBookToLibrary = () => {
   const title = document.getElementById("title").value;
@@ -30,7 +31,6 @@ const addBookToLibrary = () => {
     modalForm.reset();
     closeModal();
     displayBooks();
-  
   } else {
     alert("Please fill in all the fields");
   }
@@ -38,7 +38,6 @@ const addBookToLibrary = () => {
   console.log(myLibrary);
 };
 
-const submitBtn = document.getElementById("submit__btn");
 submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
   addBookToLibrary();
@@ -49,11 +48,11 @@ const bookContainer = document.querySelector(".books__container");
 
 const displayBooks = () => {
   bookContainer.innerHTML = "";
-  myLibrary.forEach((book) => {
+  myLibrary.forEach((book, index) => {
     bookContainer.insertAdjacentHTML(
       "beforeend",
       `
-    <div class="book-card">
+    <div class="book-card" data-id="${index}">
       <h2 class="title">${book.title}</h2>
       <p class="author">by ${book.author}</p>
       <p class="pages">${book.pages} pages</p>
@@ -63,7 +62,7 @@ const displayBooks = () => {
     );
   });
 };
-
+displayBooks();
 /* ---------------------- MODAL WINDOW AND OVERLAY ------------------------*/
 
 const modal = document.querySelector(".modal");
@@ -82,9 +81,22 @@ const closeModal = () => {
 
 openModalBtn.addEventListener("click", openModal);
 overlay.addEventListener("click", closeModal);
-
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !modal.classList.contains("hidden")) {
     closeModal();
   }
 });
+
+/* ---------------------- REMOVE BOOK ------------------------*/
+
+const removeBook = (e) => {
+  if (e.target.classList.contains("remove")) {
+    const id = e.target.parentElement.dataset.id;
+    e.target.parentElement.remove();
+    myLibrary.splice(id, 1);
+    displayBooks();
+    console.log(myLibrary);
+  }
+};
+
+bookContainer.addEventListener("click", (e) => removeBook(e));
