@@ -1,24 +1,88 @@
-const modalForm = document.getElementById("modal__form");
+/* ---------------------- FIREBASE ------------------------*/
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCtM8isIUmmy6C8KgmmpPMnbXjSJ706Ma8",
+  authDomain: "odin-library-5d3dc.firebaseapp.com",
+  databaseURL:
+    "https://odin-library-5d3dc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "odin-library-5d3dc",
+  storageBucket: "odin-library-5d3dc.appspot.com",
+  messagingSenderId: "457239759952",
+  appId: "1:457239759952:web:d1a230be4a92da627bd555",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+auth.languageCode = "en";
+const provider = new GoogleAuthProvider();
+const btnLogIn = document.querySelector(".btn__log-in");
+
+btnLogIn.addEventListener("click", () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+});
+
+const database = getDatabase(app);
+const libraryInDB = ref(database, "library");
 
 let myLibrary = [];
 
+const btnSaveInDB = document.querySelector(".btn__save");
+btnSaveInDB.addEventListener("click", (e) => {
+  push(libraryInDB, myLibrary);
+});
+//remove(booksInDB, myLibrary);
+
+onValue(libraryInDB, (snapshot) => {
+  console.log(Object.values(snapshot.val()));
+});
+
 /* ---------------------- BOOK CLASS ------------------------*/
 
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
 
-  this.info = () => {
+  info() {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
-  };
+  }
 
-  this.toggleRead = () => {
+  toggleRead() {
     this.read = this.read === "Read" ? "Not read" : "Read";
-  };
+  }
 }
+
 /* ---------------------- ADD BOOK ------------------------*/
+const modalForm = document.getElementById("modal__form");
 const submitBtn = document.getElementById("submit__btn");
 
 const addBookToLibrary = () => {
@@ -26,19 +90,17 @@ const addBookToLibrary = () => {
   const author = document.getElementById("author").value;
   const pages = document.getElementById("pages").value;
   const readCheckbox = document.getElementById("read");
-  console.log(readCheckbox);
   const read = readCheckbox.checked ? "Read" : "Not read";
 
   if (title && author && pages) {
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
-
+    //push(libraryInDB, book);
     modalForm.reset();
     closeModal();
     displayBooks();
-  } else {
-    alert("Please fill in all the fields");
-  }
+  } else alert("Please fill in all the fields");
+
   saveLibraryToLocalStorage();
   console.log(myLibrary);
 };
@@ -100,6 +162,7 @@ const removeBookFromLibrary = (e) => {
   if (e.target.classList.contains("book-card__remove-btn")) {
     const id = e.target.parentElement.dataset.id;
     e.target.parentElement.remove();
+
     myLibrary.splice(id, 1);
     displayBooks();
     console.log(myLibrary);
@@ -135,7 +198,6 @@ const toggleReadBtn = (e) => {
     saveLibraryToLocalStorage();
   }
 };
-
 bookContainer.addEventListener("click", (e) => toggleReadBtn(e));
 
 /* ---------------------- LOCAL STORAGE ------------------------*/
