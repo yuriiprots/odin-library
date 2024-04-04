@@ -15,7 +15,7 @@ function Book(title, author, pages, read) {
   };
 
   this.toggleRead = () => {
-    this.read = this.read === "read" ? "not read yet" : "read";
+    this.read = this.read === "Read" ? "Not read" : "Read";
   };
 }
 /* ---------------------- ADD BOOK ------------------------*/
@@ -27,7 +27,7 @@ const addBookToLibrary = () => {
   const pages = document.getElementById("pages").value;
   const readCheckbox = document.getElementById("read");
   console.log(readCheckbox);
-  const read = readCheckbox.checked ? "read" : "not read yet";
+  const read = readCheckbox.checked ? "Read" : "Not read";
 
   if (title && author && pages) {
     const book = new Book(title, author, pages, read);
@@ -58,11 +58,13 @@ const displayBooks = () => {
       "beforeend",
       `
     <div class="book-card" data-id="${index}">
-      <h2 class="title">${book.title}</h2>
-      <p class="author">by ${book.author}</p>
-      <p class="pages">${book.pages} pages</p>
-      <button class="read">${book.read}</button>
-      <button class="remove">Remove</button>
+      <h2 class="book-card__title">${book.title}</h2>
+      <p class="book-card__author">by ${book.author}</p>
+      <p class="book-card__pages">${book.pages} pages</p>
+      <button class="btn book-card__read-btn-${
+        book.read === "Read" ? "green" : "red"
+      }">${book.read}</button>
+      <button class="btn book-card__remove-btn">Remove</button>
     </div>`
     );
   });
@@ -72,7 +74,7 @@ displayBooks();
 
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
-const openModalBtn = document.querySelector(".btn__open-modal");
+const addBookBtn = document.querySelector(".btn__add-book");
 
 const openModal = () => {
   modal.classList.remove("hidden");
@@ -84,7 +86,7 @@ const closeModal = () => {
   overlay.classList.add("hidden");
 };
 
-openModalBtn.addEventListener("click", openModal);
+addBookBtn.addEventListener("click", openModal);
 overlay.addEventListener("click", closeModal);
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !modal.classList.contains("hidden")) {
@@ -95,7 +97,7 @@ document.addEventListener("keydown", function (e) {
 /* ---------------------- REMOVE BOOK ------------------------*/
 
 const removeBookFromLibrary = (e) => {
-  if (e.target.classList.contains("remove")) {
+  if (e.target.classList.contains("book-card__remove-btn")) {
     const id = e.target.parentElement.dataset.id;
     e.target.parentElement.remove();
     myLibrary.splice(id, 1);
@@ -109,14 +111,25 @@ bookContainer.addEventListener("click", (e) => removeBookFromLibrary(e));
 
 /* ---------------------- MARK READ OR UNREAD STATUS BOOK------------------------*/
 
-const readBtn = document.querySelector(".read");
-
 const toggleReadBtn = (e) => {
-  if (e.target.classList.contains("read")) {
+  if (
+    e.target.classList.contains("book-card__read-btn-red") ||
+    e.target.classList.contains("book-card__read-btn-green")
+  ) {
     const id = e.target.parentElement.dataset.id;
     console.log(id);
     console.log(myLibrary[id]);
     myLibrary[id].toggleRead();
+
+    e.target.classList.toggle(
+      "book-card__read-btn-red",
+      myLibrary[id].read !== "Read"
+    );
+    e.target.classList.toggle(
+      "book-card__read-btn-green",
+      myLibrary[id].read === "Read"
+    );
+
     displayBooks();
     console.log(myLibrary);
     saveLibraryToLocalStorage();

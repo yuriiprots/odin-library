@@ -8,9 +8,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/favicon_io/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicon_io/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicon_io/favicon-16x16.png"
+    />
+    <link rel="manifest" href="img/favicon_io/site.webmanifest" />
     <script
       src="https://kit.fontawesome.com/4c536a6bd5.js"
       crossorigin="anonymous"
@@ -20,13 +42,14 @@
   <body>
     <header class="header">
       <div class="container">
-        <h1>Odin Library</h1>
+        <h1 class="header__title">Odin Library</h1>
+        <button class="btn btn__log-in">Log in</button>
       </div>
     </header>
+
     <main class="main container">
-      <button class="btn btn__open-modal">Add a new book</button>
-      <div class="books__container">
-      </div>
+      <button class="btn btn__add-book">+ Add book</button>
+      <div class="books__container"></div>
     </main>
 
     <footer class="footer">
@@ -43,8 +66,8 @@
     </footer>
 
     <div class="modal hidden">
-      <h2 class="modal__title">Add a new book</h2>
-      <form id="modal__form">
+      <form id="modal__form" class="modal__form">
+        <h3 class="modal__title">Add a new book</h3>
         <input
           type="text"
           id="title"
@@ -72,10 +95,14 @@
           required
         />
 
-        <label for="read">Have you read it?</label>
-        <input type="checkbox" id="read" name="read" />
+        <div class="modal__form--checkbox">
+          <label for="read">Have you read it?</label>
+          <input type="checkbox" class="checkbox" id="read" name="read" />
+        </div>
 
-        <button type="submit" id="submit__btn" class="btn">Submit</button>
+        <button type="submit" id="submit__btn" class="btn btn__submit">
+          Submit
+        </button>
       </form>
     </div>
     <div class="overlay hidden"></div>

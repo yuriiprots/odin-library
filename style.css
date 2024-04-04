@@ -1,105 +1,92 @@
 :root {
-  --background: #f0eef1;
-  --font: #222;
-  --border: #333;
-  --display: #eee;
-  --calculator: #aaa;
+  --white: #fffbfb;
+  --grey: #f0eef1;
+  --black: #050505;
+
+  --red: #ff7070;
+  --green: #70ff70;
+
+  --light-green: #9fff9c;
+  --light-red: #ff9c9c;
+
+  --dark-green: #00c200d8;
+  --dark-red: #b70000a4;
+
+  --border-radius: 8px;
+
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 40px;
 
   --btn: #eee;
   --btn-hover: #ddd;
   --btn-active: #ccc;
 
-  --btn-red: #faa;
-  --btn-red-hover: #e99;
-  --btn-red-active: #d88;
-
-  --btn-blue: #aaf;
-  --btn-blue-hover: #99e;
-  --btn-blue-active: #88d;
+  --container-width: 1200px;
+  --shadow: rgba(0, 0, 0, 0.2) 0px 4px 6px;
 }
 
 * {
   margin: 0;
   padding: 0;
-  bottom: 0;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
   box-sizing: inherit;
 }
 
 html {
+  box-sizing: border-box;
   /* footer support */
   position: relative;
   min-height: 100%;
 }
 
 body {
-  background-color: #eee;
-  color: var(--font);
-  font-family: "Roboto", sans-serif;
+  background-color: var(--grey);
+  color: var(--black);
+
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
   line-height: 1.6;
+
+  word-wrap: break-word;
+
   /* footer support */
   margin-bottom: 100px;
 }
 
+/*----------------- HEADER -----------------*/
+
 .header {
-  background-color: white;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
 }
 
-.main {
-  margin-top: 20px;
-  text-align: center;
+.header__title {
+  font-size: 36px;
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .container {
-  max-width: 1200px;
-  padding: 20px;
+  max-width: var(--container-width);
+  padding: var(--spacing-lg);
   margin: 0 auto;
 }
 
-.books__container {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-}
-
-.book-card {
-  background-color: white;
-  text-align: center;
-  padding: 20px;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* @media screen and (max-width: 768px) {
-  .books__container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .books__container {
-    grid-template-columns: 1fr;
-  }
-} */
-
-.form_container {
-  padding: 20px;
-  border: #222 solid 2px;
-}
-
 .btn {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .btn:hover {
@@ -110,58 +97,154 @@ body {
   background-color: var(--btn-active);
 }
 
-/*---------------MODAL---------------*/
+/* ---------------- MAIN -----------------*/
+
+.main {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+}
+
+.btn__add-book {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.books__container {
+  margin-top: var(--spacing-lg);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.book-card {
+  background-color: var(--white);
+  text-align: center;
+  padding: var(--spacing-lg);
+
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  gap: var(--spacing-lg);
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .books__container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .books__container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*---------------- BOOK CARD -----------------*/
+
+.book-card__title {
+  font-size: 24px;
+}
+
+.book-card__author {
+  font-size: inherit;
+}
+
+.book-card__pages {
+  font-size: inherit;
+}
+
+.book-card__read-btn-green,
+.btn__submit {
+  width: 100%;
+  background-color: var(--light-green);
+}
+
+.book-card__read-btn-green:hover,
+.btn__submit:hover {
+  background-color: var(--green);
+}
+
+.book-card__read-btn-green:active,
+.btn__submit:active {
+  background-color: var(--dark-green);
+}
+
+.book-card__read-btn-red {
+  background-color: var(--light-red);
+}
+
+.book-card__read-btn-red:hover {
+  background-color: var(--red);
+}
+
+.book-card__read-btn-red:active {
+  background-color: var(--dark-red);
+}
+
+.book-card__remove-btn {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/*--------------- MODAL ---------------*/
 
 .modal {
+  background-color: var(--grey);
+  text-align: center;
+  width: 300px;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
   position: fixed;
   top: 50%;
   left: 50%;
-
-  background-color: #f3f3f3;
-  max-width: 60rem;
-  padding: 2rem 3rem;
-
-  border-radius: 1rem;
-  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.3);
+  z-index: 20;
 
   transform: translate(-50%, -50%);
-  transition: all 0.5s;
-
-  z-index: 20;
-}
-
-.modal-header {
-  font-size: 2rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
+  transition: all 0.2s;
 }
 
 .modal__form {
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-}
-
-.modal__form--label {
-  font-size: 1.2rem;
-  font-weight: 500;
+  gap: var(--spacing-lg);
 }
 
 .modal__form--input {
-  font-size: 1rem;
-  padding: 1rem 1.5rem;
+  background-color: var(--white);
+  font-size: inherit;
+  font-family: inherit;
+
+  padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  background-color: #fff;
 }
 
-.modal__form--button {
-  grid-column: 1 / span 2;
-  justify-self: center;
-  margin-top: 1rem;
-  font-size: 1.5rem;
+.modal__form--checkbox {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.modal__form--checkbox label {
+  pointer-events: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  accent-color: var(--white);
+}
+
+.checkbox:active {
+  accent-color: var(--grey);
 }
 
 .hidden {
@@ -172,14 +255,12 @@ body {
 /*-----------------OVERLAY----------------*/
 .overlay {
   position: fixed;
-  opacity: 0;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   backdrop-filter: blur(4px);
   background-color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
   z-index: 10;
   pointer-events: all;
 }
@@ -199,7 +280,7 @@ body {
 }
 
 .fa-github {
-  color: var(--font);
+  color: var(--black);
   transition-property: transform;
   transition-duration: 0.4s;
   transition-timing-function: ease-in-out;
